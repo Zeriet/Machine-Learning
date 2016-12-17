@@ -25,7 +25,12 @@ plt.xlabel('Sepal length [cm]')
 plt.ylabel('Petal length [cm]')
 plt.legend(loc = 'upper left')
 plt.tight_layout()
-# plt.show()
+plt.show()
 
 ppn = ps.Perceptron(eta=0.1, n_iter=10)
 ppn.fit(x,y)
+
+plt.plot(range(1, len(ppn.errors_) + 1), ppn.errors_)
+plt.xlabel("Epochs")
+plt.ylabel("Number of misclassifications")
+plt.show()
