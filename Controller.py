@@ -15,12 +15,12 @@ y = np.where(y == 'Iris-setosa', -1, 1)
 # print y
 
 # extract sepal length and petal length
-x = df.iloc[0:100, [0,2]].values
+X = df.iloc[0:100, [0, 2]].values
 print " ====== sepal and petal lengths ====== "
-print x
+print X
 # plot data
-plt.scatter(x[:50, 0], x[:50, 1], color='red', marker='o', label='setosa')
-plt.scatter(x[50:100, 0], x[50:100, 1], color = 'blue', marker = 'x', label = 'versicolor')
+plt.scatter(X[:50, 0], X[:50, 1], color='red', marker='o', label='setosa')
+plt.scatter(X[50:100, 0], X[50:100, 1], color ='blue', marker ='x', label ='versicolor')
 plt.xlabel('Sepal length [cm]')
 plt.ylabel('Petal length [cm]')
 plt.legend(loc = 'upper left')
@@ -28,7 +28,7 @@ plt.tight_layout()
 plt.show()
 
 ppn = ps.Perceptron(eta=0.1, n_iter=10)
-ppn.fit(x,y)
+ppn.fit(X, y)
 
 plt.plot(range(1, len(ppn.errors_) + 1), ppn.errors_)
 plt.xlabel("Epochs")

@@ -1,5 +1,7 @@
 import numpy as np
-class Adaline(object):
+from numpy.random import  seed
+
+class AdalineSGD(object):
     """ADAptive LInear NEuron classifier
     Paramaters
     ----------
@@ -14,12 +16,23 @@ class Adaline(object):
         Weights after fitting
     errors_ : list
         Number of misclassifications in every epoch
+    shuffle: bool (defualt: True)
+        Shuffles Traininf data every epcoh
+        if True to prevent cylcles.
+    random_state : int (default: None)
+        Set random state for shuffling
+        and initializing the weights.
 
 
     """
-    def __init__(self, eta = 0.01, n_iter = 50):
+    def __init__(self, eta = 0.01, n_iter = 10, shuffle = True, random_state = None):
         self.eta = eta
         self.n_iter = n_iter
+        self.shuffle = shuffle
+        self.w_initialized = False
+
+        if random_state:
+            seed(random_state)
 
     def fit(self, X, y):
         """Fit Training data
@@ -37,19 +50,18 @@ class Adaline(object):
         self: object
         """
 
-        self.w_ = np.zeros(1 + X.shape[1])
+        self._initialize_weights(X.shape[1])
         self.cost_ = []
 
         for i in range (self.n_iter):
+            if self.shuffle:
+                X, y = self._shuffle(X, y)
+            cost = []
+            for xi, target in ZIP(X, y):
+                cost.append(self._update_weights(xi, target))
+            avg_cost = sum (cost)/ len(y)
+            self.cost_.append(avg_cost)
 
-            output = self.net_input(X)
-            errors = (y - output)
-            self.w_[1:] += self.eta * X.T.dot(errors)
-            self.w_[0] += self.eta * errors.sum()
-            cost = (errors ** 2) .sum() / 2.0
-            self.cost_.append(cost)
-            print '====cost===='
-            print self.cost_
         return self
 
     def net_input(self, X):
@@ -67,6 +79,26 @@ class Adaline(object):
     def predict(self, X):
         """Return class lable after unit step """
         return np.where(self.activation(X) >= 0.0, 1, -1)
+
+    def _initialize_weights(self, m):
+        """Inittialize weights to zero"""
+        self.w_ = np.zeros(1+m)
+        self.w_initialized = True
+
+    def _update_weights(self, xi, target):
+        """Apply Adaline leatning rule to update the weights"""
+        output = self.net_input(xi)
+        error = (target - output)
+        self._w_[1:] += self.eta * xi.dot(error)
+        self._w_[0] += self.eta * error
+        cost = 0.5 * error ** 2
+        return cost
+
+
+
+
+
+
 
 
 
