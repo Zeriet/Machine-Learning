@@ -23,13 +23,11 @@ else:
 
 X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.3, random_state=0)
 
-from sklearn.neighbors import  KNeighborsClassifier
-knn = KNeighborsClassifier(n_neighbors=5,p=2, metric='minkowski')
+from sklearn.neighbors import KNeighborsClassifier
+knn = KNeighborsClassifier(n_neighbors=5, p=2, metric='minkowski')
 knn.fit(X_train, Y_train)
-X_combined = np.vstack((X_train, X_test))
-Y_combined = np.hstack((Y_train,Y_test))
 
-from sklearn.preprocessing import  StandardScaler
+from sklearn.preprocessing import StandardScaler
 
 sc = StandardScaler()
 sc.fit(X_train)
